@@ -1,0 +1,26 @@
+{
+  "name": "FetchFreeSSRAccount",
+  "version": "1.0.0",
+  "description": "get free SSR account via  crawler",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "dev": "ts-node index.ts",
+    "start": "node ./dist/index.js"
+  },
+  "keywords": [
+    "ssr",
+    "ss",
+    "free-account",
+    "crawler",
+    "node"
+  ],
+  "author": "nil",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^12.12.5",
+    "@types/request": "^2.48.3",
+    "request": "^2.88.0"
+  },
+  "dependencies": {}
+}
