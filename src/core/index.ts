@@ -1,6 +1,6 @@
 import { exec } from "child_process"
-import { resolve } from 'path'
-import request = require('request')
+import path from 'path'
+import request from 'request'
 import { readFileSync, writeFileSync } from 'fs'
 
 interface withCountTimeNode {
@@ -12,12 +12,17 @@ export default class FilterNode {
     private nodeList: SSRNode[]
     constructor(nodeList: SSRNode[]) {
         this.nodeList = nodeList
+        console.log(`当前共有${this.nodeList.length}个节点待处理`)
     }
 
     async check (): Promise<SSRNode[]> {
         this.nodeList = this.unique(this.nodeList)
+        console.log(`去重处理完成，剩余${this.nodeList.length}个节点`)
         this.nodeList = await this.batchPing(this.nodeList)
+        console.log(`连通性测试完成，剩余${this.nodeList.length}个节点`)
+        process.on('exit', this.stopSSR)
         this.nodeList = await this.batchCrossTest(this.nodeList)
+        console.log(`可用性测试完成，剩余${this.nodeList.length}个节点`)
         return Promise.resolve(this.nodeList)
     }
 
@@ -68,7 +73,7 @@ export default class FilterNode {
     private startSSR():Promise<undefined> {
         return new Promise(resolve => {
             // @ts-ignore
-            let targetPath = resolve(__dirname, '../../bin/win32/SSR.exe')
+            let targetPath = path.resolve(__dirname, '../../bin/win32/SSR.exe')
             exec(`start ${targetPath}`,{ windowsHide: true })
             // Wait for client startup to complete
             setTimeout(resolve, 3000)
@@ -91,7 +96,7 @@ export default class FilterNode {
     private crossTest(node: SSRNode): Promise<withCountTimeNode | undefined> {
         return new Promise((resolve) => {
             const start = new Date().getTime()
-            console.log('开始请求google')
+            console.log(`通过${node.server}代理开始请求google`)
             request('https://www.google.as',
                 { proxy: 'http://127.0.0.1:6665', timeout: 3000 },
                 (error, response, body) => {
@@ -101,7 +106,6 @@ export default class FilterNode {
                             requestTime: new Date().getTime() - start,
                             node
                         })
-                        return
                     }
                     resolve()
                 }
@@ -110,30 +114,29 @@ export default class FilterNode {
     }
 
     private writeSSRConfig (node: SSRNode) {
-        const filePath = resolve(__dirname, '../../bin/win32/gui-config.json')
+        const filePath = path.resolve(__dirname, '../../bin/win32/gui-config.json')
         let SSRConfig = JSON.parse(readFileSync(filePath).toString())
         SSRConfig.configs = [node]
         writeFileSync(filePath, JSON.stringify(SSRConfig, null, 2))
     }
 
     private batchCrossTest(arr: SSRNode[]):Promise<SSRNode[]> {
-        process.on('exit', this.stopSSR)
         return new Promise(async resolve => {
             const copy = arr.slice(0)
             const result: withCountTimeNode[] = []
             await this.stopSSR()
             while (copy.length > 0) {
                 let node = copy.shift()
-                console.log(`还剩${copy.length + 1}个节点需要检测😙, ${node.server}`)
+                console.log(`还剩${copy.length + 1}个节点需要检测😙`)
                 this.writeSSRConfig(node)
                 await this.startSSR()
-                console.log('正在检测节点访问是否通畅')
+                console.log(`正在检测 ${node.server}节点访问是否通畅`)
                 let res:withCountTimeNode| undefined = await this.crossTest(node)
                 if (res) {
                     console.log(`-------------------${node.server}节点可用😀---------------------`)
                     result.push(res)
                 } else {
-                    console.log(`${node.node.server}节点已被爆破😭`)
+                    console.log(`${node.server}节点已被爆破😭`)
                 }
                 await this.stopSSR()
             }
