@@ -1,22 +1,21 @@
 {
   "configs": [
     {
-      "remarks": "onessr - 台湾",
-      "id": "30167858108271917",
-      "server": "111.241.124.76",
-      "server_port": "65531",
+      "remarks": "SSRTOOL_Node:荷兰-North Holland",
+      "id": "094efe5a-4361-4bb7-ad5a-1a78b73d1ac8",
+      "server": "185.186.245.44",
+      "server_port": 8097,
       "server_udp_port": 0,
-      "password": "SSR.Gold@#65531",
+      "password": "eIW0Dnk69454e6nSwuspv9DmS201tQ0D",
       "method": "aes-256-cfb",
-      "protocol": "auth_aes128_sha1",
-      "protocolparam": "",
-      "obfs": "http_simple",
-      "obfsparam": "bccf633926.baidu.com",
-      "remarks_base64": "b25lc3NyIC0g5Y-w5rm-",
-      "group": "onessr",
+      "protocol": "origin",
+      "protocolparam": null,
+      "obfs": "plain",
+      "obfsparam": null,
+      "remarks_base64": "5pyq55+l",
+      "group": "WWW.SSRTOOL.COM",
       "enable": true,
-      "udp_over_tcp": false,
-      "protoparam": "33926:W3a5PB"
+      "udp_over_tcp": false
     }
   ],
   "index": 0,
