@@ -39,3 +39,8 @@ dist/**/*
 
 # ignore yarn.lock
 yarn.lock
+
+# block SSR log files and temp files
+transfer_log.json
+temp
+
