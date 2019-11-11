@@ -14,3 +14,7 @@ declare interface SSRConfig {
 
     [propName: string]: any
 }
+
+declare interface proxyConfig {
+    proxy: string
+}
