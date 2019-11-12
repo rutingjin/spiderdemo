@@ -1,5 +1,7 @@
+import chalk from 'chalk'
+
 /**
- * 解码base64
+ * decode base64
  * @param base64String
  * @constructor
  */
@@ -8,7 +10,7 @@ function Base64ToSting (base64String: string): string {
 }
 
 /**
- * 解码 SSR Link
+ * decode SSR Link
  * @param list
  */
 export function decodeSSRLink (list: string[]): SSRNode[] {
@@ -51,4 +53,33 @@ export function decodeSSRLink (list: string[]): SSRNode[] {
         })
         return config
     })
+}
+
+/**
+ * export platform type
+ */
+export const platform = process.platform
+
+/**
+ * export log function
+ * @param content
+ * @param success
+ */
+export function log(content:string, success?:boolean):void {
+    if (typeof success === "boolean") {
+        if (success) {
+            console.log(chalk.green(content))
+        } else {
+            console.log(chalk.red(content))
+        }
+    } else {
+        console.log(
+            content.replace(
+                /\d+/g,
+                (number) => {
+                    return chalk.magentaBright(number)
+                }
+            )
+        )
+    }
 }

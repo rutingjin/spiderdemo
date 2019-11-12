@@ -18,12 +18,14 @@
   "author": "nil",
   "license": "MIT",
   "devDependencies": {
+    "@types/chalk": "^2.2.0",
     "@types/cheerio": "^0.22.13",
     "@types/crypto-js": "^3.1.43",
     "@types/node": "^12.12.5",
     "@types/request": "^2.48.3"
   },
   "dependencies": {
+    "chalk": "^3.0.0",
     "cheerio": "^1.0.0-rc.3",
     "crypto-js": "^3.1.9-1",
     "request": "^2.88.0"

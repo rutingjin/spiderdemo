@@ -2,6 +2,7 @@ import { exec } from "child_process"
 import path from 'path'
 import request from 'request'
 import { readFileSync, writeFileSync } from 'fs'
+import { log } from '../utils'
 
 interface withCountTimeNode {
     requestTime: number,
@@ -12,17 +13,17 @@ export default class FilterNode {
     private nodeList: SSRNode[]
     constructor(nodeList: SSRNode[]) {
         this.nodeList = nodeList
-        console.log(`当前共有${this.nodeList.length}个节点待处理`)
+        log(`There are currently ${this.nodeList.length} nodes waiting to be processed`)
     }
 
     async check (): Promise<SSRNode[]> {
         this.nodeList = this.unique(this.nodeList)
-        console.log(`去重处理完成，剩余${this.nodeList.length}个节点`)
+        log(`The duplicate data has been deleted, remaining ${this.nodeList.length} nodes.`)
         this.nodeList = await this.batchPing(this.nodeList)
-        console.log(`连通性测试完成，剩余${this.nodeList.length}个节点`)
+        log(`Host usability testing complete, remaining ${this.nodeList.length} nodes.`)
         process.on('exit', this.stopSSR)
         this.nodeList = await this.batchCrossTest(this.nodeList)
-        console.log(`可用性测试完成，剩余${this.nodeList.length}个节点`)
+        log(`Nodes availability test completed, remaining ${this.nodeList.length} nodes.`)
         return Promise.resolve(this.nodeList)
     }
 
@@ -96,11 +97,11 @@ export default class FilterNode {
     private crossTest(node: SSRNode): Promise<withCountTimeNode | undefined> {
         return new Promise((resolve) => {
             const start = new Date().getTime()
-            console.log(`通过${node.server}代理开始请求google`)
+            log(`Start accessing the Google service through the proxy`)
             request('https://www.google.as',
                 { proxy: 'http://127.0.0.1:6665', timeout: 3000 },
                 (error, response, body) => {
-                    console.log('请求发送完成')
+                    log('Request sent complete')
                     if (!error && response && response.statusCode === 200 && body) {
                         resolve({
                             requestTime: new Date().getTime() - start,
@@ -127,16 +128,16 @@ export default class FilterNode {
             await this.stopSSR()
             while (copy.length > 0) {
                 let node = copy.shift()
-                console.log(`还剩${copy.length + 1}个节点需要检测😙`)
+                log(`The remaining ${copy.length + 1} nodes are waiting to be detected 😙`)
                 this.writeSSRConfig(node)
                 await this.startSSR()
-                console.log(`正在检测 ${node.server}节点访问是否通畅`)
+                log(`Detecting ${node.server} availability`)
                 let res:withCountTimeNode| undefined = await this.crossTest(node)
                 if (res) {
-                    console.log(`-------------------${node.server}节点可用😀---------------------`)
+                    log(`[${node.server}]: Find an available node 😀`, true)
                     result.push(res)
                 } else {
-                    console.log(`${node.server}节点已被爆破😭`)
+                    log(`[${node.server}]: This node has expired 😭`, false)
                 }
                 await this.stopSSR()
             }
