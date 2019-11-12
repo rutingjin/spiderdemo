@@ -19,7 +19,7 @@ export function fetchSSRList (proxyconfig:proxyConfig = defaultConfig):Promise<S
             uri,
             { ...proxyconfig, method: 'POST' },
             (error, response, body) => {
-                if (error) {
+                if (error || !body) {
                     reject()
                 }
                 const result = JSON.parse(body)
