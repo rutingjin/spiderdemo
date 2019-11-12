@@ -1,17 +1,17 @@
 {
   "configs": [
     {
-      "remarks": "SSRTOOL_Node:荷兰-North Holland",
-      "id": "094efe5a-4361-4bb7-ad5a-1a78b73d1ac8",
-      "server": "185.186.245.44",
+      "remarks": "SSRTOOL_Node:美国 ",
+      "id": "fa940021-08bf-4d8a-88ca-0ca27e363591",
+      "server": "199.223.119.83",
       "server_port": 8097,
       "server_udp_port": 0,
       "password": "eIW0Dnk69454e6nSwuspv9DmS201tQ0D",
       "method": "aes-256-cfb",
       "protocol": "origin",
-      "protocolparam": null,
+      "protocolparam": "",
       "obfs": "plain",
-      "obfsparam": null,
+      "obfsparam": "",
       "remarks_base64": "5pyq55+l",
       "group": "WWW.SSRTOOL.COM",
       "enable": true,

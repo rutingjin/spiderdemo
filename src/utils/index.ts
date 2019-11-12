@@ -83,3 +83,60 @@ export function log(content:string, success?:boolean):void {
         )
     }
 }
+
+export enum EventCountStatus { fulfilled = 'fulfilled',  rejected = 'rejected'}
+
+export interface EventCountSuccess {
+    status: EventCountStatus,
+    value: any
+}
+
+interface EventCountError {
+    status: EventCountStatus,
+    reason: any
+}
+
+interface EventCountCenter<T> {
+    total: number,
+    count: number,
+    notify: (args?: T) => Promise<T>,
+    result: Array<EventCountSuccess | EventCountError>,
+}
+
+class EventCount {
+    private center: EventCountCenter<Array<EventCountSuccess | EventCountError>> = {
+        total: 0,
+        count: 0,
+        notify: () => Promise.resolve([]),
+        result: []
+    }
+    constructor (length: number) {
+        this.center.total = length
+    }
+
+    emit(result: EventCountSuccess | EventCountError) {
+        this.center.count++
+        this.center.result.push(result)
+        if (this.center.count === this.center.total) {
+            this.center.notify.call(this, this.center.result)
+        }
+    }
+
+    notify(cb: (args?: Array<EventCountSuccess | EventCountError>) => Promise<Array<EventCountSuccess | EventCountError>>) {
+        this.center.notify = cb
+    }
+}
+
+export function allSettled<T>(args: Promise<T>[]): Promise<Array<EventCountSuccess | EventCountError>> {
+    const counter = new EventCount(args.length)
+    return new Promise<Array<EventCountSuccess | EventCountError>>(resolve => {
+        counter.notify(resolve as (args?: Array<EventCountSuccess | EventCountError>) => Promise<Array<EventCountSuccess | EventCountError>>)
+        args.forEach((singlePromise: Promise<T>) => {
+            singlePromise.then((data: T) => {
+                counter.emit({ status: EventCountStatus.fulfilled, value: data })
+            }).catch((err: T) => {
+                counter.emit({ status: EventCountStatus.rejected, reason: err })
+            })
+        })
+    })
+}

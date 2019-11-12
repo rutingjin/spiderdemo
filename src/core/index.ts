@@ -2,7 +2,7 @@ import { exec } from "child_process"
 import path from 'path'
 import request from 'request'
 import { readFileSync, writeFileSync } from 'fs'
-import { log } from '../utils'
+import { log, EventCountStatus, EventCountSuccess, allSettled } from '../utils'
 
 interface withCountTimeNode {
     requestTime: number,
@@ -41,14 +41,14 @@ export default class FilterNode {
         return result
     }
 
-    private ping (node:SSRNode): Promise<SSRNode | undefined> {
-        return new Promise(resolve => {
+    private ping (node:SSRNode): Promise<SSRNode> {
+        return new Promise<SSRNode>((resolve, reject) => {
             exec(
                 `chcp 65001 && ping -n 3 ${node.server}`,
                 { windowsHide: true },
                 (err) => {
                     if (err) {
-                        resolve()
+                        reject(err)
                     } else {
                         resolve(node)
                     }
@@ -65,13 +65,16 @@ export default class FilterNode {
                 let node = copy.shift()
                 promises.push(this.ping(node))
             }
-            Promise.all(promises).then(res => {
-                resolve(Array.prototype.filter.call(res, (node: SSRNode | undefined) => node !== undefined))
+            allSettled(promises).then(res => {
+                resolve(
+                    res.filter(item => item.status === EventCountStatus.fulfilled)
+                        .map(item => (item as EventCountSuccess).value)
+                )
             })
         })
     }
 
-    private startSSR():Promise<undefined> {
+    private startSSR():Promise<void> {
         return new Promise(resolve => {
             // @ts-ignore
             let targetPath = path.resolve(__dirname, '../../bin/win32/SSR.exe')
@@ -81,7 +84,7 @@ export default class FilterNode {
         })
     }
 
-    private stopSSR():Promise<undefined> {
+    private stopSSR():Promise<void> {
         return new Promise((resolve => {
             exec(
                 'taskkill /f /im SSR.exe',
@@ -94,7 +97,7 @@ export default class FilterNode {
         }))
     }
 
-    private crossTest(node: SSRNode): Promise<withCountTimeNode | undefined> {
+    private crossTest(node: SSRNode): Promise<withCountTimeNode | void> {
         return new Promise((resolve) => {
             const start = new Date().getTime()
             log(`Start accessing the Google service through the proxy`)
@@ -132,7 +135,7 @@ export default class FilterNode {
                 this.writeSSRConfig(node)
                 await this.startSSR()
                 log(`Detecting ${node.server} availability`)
-                let res:withCountTimeNode| undefined = await this.crossTest(node)
+                let res:withCountTimeNode| void = await this.crossTest(node)
                 if (res) {
                     log(`[${node.server}]: Find an available node 😀`, true)
                     result.push(res)
