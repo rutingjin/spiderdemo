@@ -56,9 +56,13 @@ export function decodeSSRLink (list: string[]): SSRNode[] {
 }
 
 /**
- * export platform type
+ * export support platform enum
  */
-export const platform = process.platform
+export enum platformEnum {
+    window = 'win32',
+    linux = 'linux',
+    macOS = 'darwin'
+}
 
 /**
  * export log function
@@ -84,18 +88,30 @@ export function log(content:string, success?:boolean):void {
     }
 }
 
+/**
+ * defined the type of status that allSettled function returned
+ */
 export enum EventCountStatus { fulfilled = 'fulfilled',  rejected = 'rejected'}
 
+/**
+ * defined the type of value that allSettled function returned when it invoked success
+ */
 export interface EventCountSuccess {
     status: EventCountStatus,
     value: any
 }
 
+/**
+ * defined the type of value that allSettled function returned when it invoked error
+ */
 interface EventCountError {
     status: EventCountStatus,
     reason: any
 }
 
+/**
+ * defined EventCount internal data structures
+ */
 interface EventCountCenter<T> {
     total: number,
     count: number,
@@ -103,6 +119,9 @@ interface EventCountCenter<T> {
     result: Array<EventCountSuccess | EventCountError>,
 }
 
+/**
+ * Used to simulate the allSettled method
+ */
 class EventCount {
     private center: EventCountCenter<Array<EventCountSuccess | EventCountError>> = {
         total: 0,
@@ -127,6 +146,10 @@ class EventCount {
     }
 }
 
+/**
+ * promise allSettled method polyfill
+ * @param args
+ */
 export function allSettled<T>(args: Promise<T>[]): Promise<Array<EventCountSuccess | EventCountError>> {
     const counter = new EventCount(args.length)
     return new Promise<Array<EventCountSuccess | EventCountError>>(resolve => {
