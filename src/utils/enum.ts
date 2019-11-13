@@ -11,4 +11,7 @@ export enum platformEnum {
 /**
  * defined the type of status that allSettled function returned
  */
-export enum allSettledStatusEnum { fulfilled = 'fulfilled',  rejected = 'rejected'}
+export enum allSettledStatusEnum {
+    fulfilled = 'fulfilled',
+    rejected = 'rejected'
+}

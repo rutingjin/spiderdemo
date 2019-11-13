@@ -1,5 +1,5 @@
 import request from "request";
-import { log } from "../utils";
+import log from "./log";
 import stopSSR from "./stop";
 import overrideConfig from "./overrideConfig";
 import startSSR from "./start";

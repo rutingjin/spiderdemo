@@ -1,7 +1,4 @@
-import unique from "./unique";
-import batchPing from './ping'
-import batchCrossTest from './crossTest'
-import { log } from '../utils'
+import { log, unique, batchPing, batchCrossTest } from '../utils'
 
 export default class FilterNode {
     private nodeList: SSRNode[]
@@ -17,6 +14,6 @@ export default class FilterNode {
         log(`Host usability testing complete, remaining ${this.nodeList.length} nodes.`)
         this.nodeList = await batchCrossTest(this.nodeList)
         log(`Nodes availability test completed, remaining ${this.nodeList.length} nodes.`)
-        return Promise.resolve(this.nodeList)
+        return this.nodeList
     }
 }

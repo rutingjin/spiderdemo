@@ -1,5 +1,6 @@
 import { exec } from "child_process"
-import {allSettled, allSettledStatusEnum, allSettledSuccess, platformEnum} from '../utils'
+import allSettled, { allSettledSuccess } from './allSettled'
+import { allSettledStatusEnum, platformEnum } from './enum'
 
 /**
  * verify domain/server is operating and network accessible.

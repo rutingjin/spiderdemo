@@ -1,5 +1,5 @@
 import {exec} from "child_process";
-import { platformEnum } from "../utils";
+import { platformEnum } from "./enum";
 
 export default function ():Promise<void> {
     return new Promise((resolve, reject) => {
