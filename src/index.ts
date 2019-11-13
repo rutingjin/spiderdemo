@@ -1,4 +1,4 @@
-import Filter from './core'
+import Filter from './filters'
 import { readFileSync } from 'fs'
 import path from 'path'
 

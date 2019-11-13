@@ -1,5 +1,5 @@
 import { exec } from "child_process"
-import {allSettled, EventCountStatus, EventCountSuccess, platformEnum} from '../utils'
+import {allSettled, allSettledStatusEnum, allSettledSuccess, platformEnum} from '../utils'
 
 /**
  * verify domain/server is operating and network accessible.
@@ -43,8 +43,8 @@ export default function batchPing(arr: SSRNode[]): Promise<SSRNode[]> {
         }
         allSettled(promises).then(res => {
             resolve(
-                res.filter(item => item.status === EventCountStatus.fulfilled)
-                    .map(item => (item as EventCountSuccess).value)
+                res.filter(item => item.status === allSettledStatusEnum.fulfilled)
+                    .map(item => (item as allSettledSuccess).value)
             )
         })
     })
