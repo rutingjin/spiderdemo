@@ -13,7 +13,7 @@ interface lncnData {
     }
 }
 
-export function fetchSSRList (proxyconfig:proxyConfig = defaultConfig):Promise<SSRNode[]> {
+export default function (proxyconfig:proxyConfig = defaultConfig):Promise<SSRNode[]> {
     return new Promise<SSRNode[]>((resolve, reject) => {
         request(
             uri,

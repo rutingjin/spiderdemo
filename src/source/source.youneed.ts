@@ -8,7 +8,7 @@ const headers:object = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36'
 }
 
-export function fetchSSRList ():Promise<SSRNode[]> {
+export default function ():Promise<SSRNode[]> {
     return new Promise<SSRNode[]>((resolve, reject) => {
         const result: string[] = []
         request(uri, { headers }, (error, response, body) => {

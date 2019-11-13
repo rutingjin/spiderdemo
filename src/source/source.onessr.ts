@@ -8,7 +8,7 @@ const formData = {
     pageSize: 4,
 }
 
-export function fetchSSRList ():Promise<SSRNode[]> {
+export default function ():Promise<SSRNode[]> {
     return new Promise<SSRNode[]>((resolve, reject) => {
         request({
             uri,
