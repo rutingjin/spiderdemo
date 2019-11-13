@@ -12,7 +12,7 @@ export default function ():Promise<void> {
                     err => {
                         // Ignore errors that the process did not find
                         if (err && err.message.indexOf('not found') === -1) {
-                            reject(new Error('An error occurred while kill the ssr process'))
+                            reject(new Error('An error occurred while killing the ssr process'))
                         }
                         // Wait for client stop to complete
                         resolve()
