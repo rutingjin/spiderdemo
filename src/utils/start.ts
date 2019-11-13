@@ -15,7 +15,7 @@ export default function ():Promise<void> {
                 break
             default:
                 // TODO: Other systems are not yet compatible
-                reject()
+                reject(new Error('Only support windows platform, other systems are not yet compatible'))
         }
     })
 }

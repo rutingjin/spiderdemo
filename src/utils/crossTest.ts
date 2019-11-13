@@ -10,8 +10,8 @@ interface withCountTimeNode {
     node: SSRNode
 }
 
-function crossTest (node: SSRNode): Promise<withCountTimeNode | void> {
-    return new Promise<withCountTimeNode | void>((resolve) => {
+function crossTest (node: SSRNode): Promise<withCountTimeNode> {
+    return new Promise<withCountTimeNode>((resolve, reject) => {
         const start = new Date().getTime()
         log(`Start accessing the Google service through the proxy`)
         request('https://www.google.as',
@@ -24,7 +24,7 @@ function crossTest (node: SSRNode): Promise<withCountTimeNode | void> {
                         node
                     })
                 }
-                resolve()
+                reject(new Error('An error occurred while accessing the Google service.'))
             }
         )
     })
@@ -42,14 +42,15 @@ export default function batchCrossTest (arr: SSRNode[]):Promise<SSRNode[]> {
             await overrideConfig(node)
             await startSSR()
             log(`Detecting ${node.server} availability`)
-            let res:withCountTimeNode| void = await crossTest(node)
-            if (res) {
+            try {
+                let res:withCountTimeNode = await crossTest(node)
                 log(`[${node.server}]: Find an available node 😀`, true)
                 result.push(res)
-            } else {
+            } catch (e) {
                 log(`[${node.server}]: This node has expired 😭`, false)
+            } finally {
+                await stopSSR()
             }
-            await stopSSR()
         }
         const json = result
             .sort((pre:withCountTimeNode, next) => pre.requestTime - next.requestTime)

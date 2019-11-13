@@ -7,7 +7,7 @@ export default function (node: SSRNode):Promise<void> {
     return new Promise<void>((resolve, reject) => {
         readFile(filePath, (err, data) => {
             if (err) {
-                reject()
+                reject(new Error('An error occurred while reading the config file.'))
             }
             let SSRConfig = JSON.parse(data.toString())
             SSRConfig.configs = [node]
@@ -16,7 +16,7 @@ export default function (node: SSRNode):Promise<void> {
                 JSON.stringify(SSRConfig, null, 2),
                 (err) => {
                     if (err) {
-                        reject()
+                        reject(new Error('An error occurred while writing the config file.'))
                     }
                     resolve()
                 }

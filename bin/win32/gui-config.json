@@ -1,10 +1,10 @@
 {
   "configs": [
     {
-      "remarks": "SSRTOOL_Node:美国 ",
-      "id": "fa940021-08bf-4d8a-88ca-0ca27e363591",
-      "server": "199.223.119.83",
-      "server_port": 8097,
+      "remarks": "SSRTOOL_Node:英国-英格兰",
+      "id": "fbe48eae-20aa-4eb4-8174-7d18f28d3f1e",
+      "server": "176.58.97.137",
+      "server_port": 8099,
       "server_udp_port": 0,
       "password": "eIW0Dnk69454e6nSwuspv9DmS201tQ0D",
       "method": "aes-256-cfb",
