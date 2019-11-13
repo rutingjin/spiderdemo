@@ -10,8 +10,9 @@ export default function ():Promise<void> {
                     'taskkill /f /im SSR.exe',
                     { windowsHide: true },
                     err => {
-                        if (err) {
-                            reject()
+                        // Ignore errors that the process did not find
+                        if (err && err.message.indexOf('not found') === -1) {
+                            reject(new Error('An error occurred while kill the ssr process'))
                         }
                         // Wait for client stop to complete
                         resolve()
@@ -20,7 +21,7 @@ export default function ():Promise<void> {
                 break
             default:
                 // TODO: Other systems are not yet compatible
-                reject()
+                reject(new Error('Only support windows platform, other systems are not yet compatible'))
         }
     })
 }
