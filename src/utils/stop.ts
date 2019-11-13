@@ -7,11 +7,12 @@ export default function ():Promise<void> {
             // Compatible with windows platform
             case platformEnum.window:
                 exec(
-                    'taskkill /f /im SSR.exe',
+                    'chcp 65001 && taskkill /f /im SSR.exe',
                     { windowsHide: true },
                     err => {
                         // Ignore errors that the process did not find
                         if (err && err.message.indexOf('not found') === -1) {
+                            console.log(err)
                             reject(new Error('An error occurred while kill the ssr process'))
                         }
                         // Wait for client stop to complete

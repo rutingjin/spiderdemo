@@ -38,16 +38,16 @@ export default function batchCrossTest (arr: SSRNode[]):Promise<SSRNode[]> {
         await stopSSR()
         while (copy.length > 0) {
             let node = copy.shift()
-            log(`The remaining ${copy.length + 1} nodes are waiting to be detected 😙`)
+            log(`The remaining ${copy.length + 1} nodes are waiting to be detected ╮( ˘ ､ ˘ )╭`)
             await overrideConfig(node)
             await startSSR()
             log(`Detecting ${node.server} availability`)
             try {
                 let res:withCountTimeNode = await crossTest(node)
-                log(`[${node.server}]: Find an available node 😀`, true)
+                log(`[${node.server}]: Find an available node (=^_^=)`, true)
                 result.push(res)
             } catch (e) {
-                log(`[${node.server}]: This node has expired 😭`, false)
+                log(`[${node.server}]: This node has expired ╥﹏╥`, false)
             } finally {
                 await stopSSR()
             }
