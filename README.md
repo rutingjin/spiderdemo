@@ -1,2 +1,2 @@
-# spiderforssr
-A crawler built with nodejs to get free ssr accounts
+# spider
+A crawler built with nodejs and typescript

@@ -1,0 +1,34 @@
+{
+  "name": "SpiderDemo",
+  "version": "1.0.0",
+  "description": "get free SSR account via  crawler",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "dev": "npx ts-node --files ./src/index.ts ",
+    "start": "node ./dist/index.js"
+  },
+  "keywords": [
+    "free-account",
+    "crawler",
+    "node",
+    "typescript"
+  ],
+  "author": "nil",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/cheerio": "^0.22.13",
+    "@types/crypto-js": "^3.1.43",
+    "@types/node": "^12.12.5",
+    "@types/request": "^2.48.3",
+    "ts-node": "^8.5.0",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "cheerio": "^1.0.0-rc.3",
+    "crypto-js": "^3.1.9-1",
+    "request": "^2.88.0"
+  }
+}
