@@ -43,4 +43,7 @@ yarn.lock
 # block SSR log files and temp files
 transfer_log.json
 temp
+gui-config.json
+
+data/
 
