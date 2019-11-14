@@ -1,5 +1,5 @@
 import request from 'request'
-import { decodeSSRLink } from '../utils'
+import { decodeSSRLink } from '../../utils'
 
 const uri = 'https://onessr.ml/articles/getArticles'
 

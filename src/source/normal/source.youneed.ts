@@ -1,6 +1,6 @@
 import request from "request"
 import cheerio from 'cheerio'
-import { decodeSSRLink } from '../utils'
+import { decodeSSRLink } from '../../utils'
 
 const uri:string = 'https://23.95.215.189/free-ssr'
 

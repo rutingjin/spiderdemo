@@ -18,3 +18,7 @@ declare interface SSRConfig {
 declare interface proxyConfig {
     proxy: string
 }
+
+declare type normalSourceGetter = () => Promise<SSRNode[]>
+
+declare type proxySourceGetter = (config: proxyConfig) => Promise<SSRNode[]>
