@@ -12,7 +12,7 @@ function Base64ToSting (base64String: string): string {
  * @param list
  */
 export default function (list: string[]): SSRNode[] {
-    return list.map(link => {
+    return list.filter(link => !!link).map(link => {
         const originString = Base64ToSting(
             link.split('/')[2]
         )
