@@ -7,7 +7,7 @@ export default function ():Promise<void> {
             // Compatible with windows platform
             case platformEnum.window:
                 exec(
-                    'taskkill /f /im SSR.exe',
+                    'chcp 65001 && taskkill /f /im SSR.exe',
                     { windowsHide: true },
                     err => {
                         // Ignore errors that the process did not find
