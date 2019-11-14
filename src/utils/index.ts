@@ -1,7 +1,7 @@
 export { platformEnum, allSettledStatusEnum } from './enum'
 export { default as log } from './log'
 export { default as decodeSSRLink } from './decodeSSRLink'
-export { default as allSettled, allSettledSuccess } from './allSettled'
+export { default as allSettled, allSettledSuccess, allSettledError } from './allSettled'
 export { default as unique } from './unique'
 export { default as startSSR } from './start'
 export { default as stopSSR } from './stop'

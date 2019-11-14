@@ -18,17 +18,18 @@ export default function ():Promise<SSRNode[]> {
         }, (error, response, body) => {
             if (error) {
                 reject()
+            } else {
+                const originString = body.data && body.data[0] && body.data[0].articleContent || ''
+                const linkList = originString
+                    .split('\n')
+                    .map((line: string) => {
+                        if (line) {
+                            let reg:RegExp = /(?<=>)[^<>]+(?=<)/g
+                            return line.match(reg)[0]
+                        }
+                    })
+                resolve(decodeSSRLink(linkList))
             }
-            const originString = body.data && body.data[0] && body.data[0].articleContent || ''
-            const linkList = originString
-                .split('\n')
-                .map((line: string) => {
-                    if (line) {
-                        let reg:RegExp = /(?<=>)[^<>]+(?=<)/g
-                        return line.match(reg)[0]
-                    }
-                })
-            resolve(decodeSSRLink(linkList))
         })
     })
 }

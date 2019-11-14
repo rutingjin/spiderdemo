@@ -11,7 +11,7 @@ export interface allSettledSuccess {
 /**
  * defined the type of value that allSettled function returned when it invoked error
  */
-interface allSettledError {
+export interface allSettledError {
     status: allSettledStatusEnum,
     reason: any
 }
@@ -60,13 +60,17 @@ class EventCount {
 export default function allSettled<T>(args: Promise<T>[]): Promise<Array<allSettledSuccess | allSettledError>> {
     const counter = new EventCount(args.length)
     return new Promise<Array<allSettledSuccess | allSettledError>>(resolve => {
-        counter.notify(resolve as (args?: Array<allSettledSuccess | allSettledError>) => Promise<Array<allSettledSuccess | allSettledError>>)
-        args.forEach((singlePromise: Promise<T>) => {
-            singlePromise.then((data: T) => {
-                counter.emit({ status: allSettledStatusEnum.fulfilled, value: data })
-            }).catch((err: T) => {
-                counter.emit({ status: allSettledStatusEnum.rejected, reason: err })
+        if (args.length === 0) {
+            resolve([])
+        } else {
+            counter.notify(resolve as (args?: Array<allSettledSuccess | allSettledError>) => Promise<Array<allSettledSuccess | allSettledError>>)
+            args.forEach((singlePromise: Promise<T>) => {
+                singlePromise.then((data: T) => {
+                    counter.emit({ status: allSettledStatusEnum.fulfilled, value: data })
+                }).catch((err: T) => {
+                    counter.emit({ status: allSettledStatusEnum.rejected, reason: err })
+                })
             })
-        })
+        }
     })
 }
