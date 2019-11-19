@@ -1,4 +1,4 @@
-import {readdirSync} from "fs"
+import {readdirSync, existsSync, mkdirSync, readFileSync} from "fs"
 import path from 'path'
 import {
     allSettled,
@@ -11,8 +11,17 @@ import {
     log
 } from '../utils'
 
-const normalFiles = readdirSync(path.resolve(__dirname, './normal/'))
-const proxyFiles = readdirSync(path.resolve(__dirname, './proxy'))
+const normalPath = path.resolve(__dirname, './normal/')
+const proxyPath = path.resolve(__dirname, './proxy')
+
+if (!existsSync(normalPath)) {
+    mkdirSync(normalPath)
+}
+if (!existsSync(proxyPath)) {
+    mkdirSync(proxyPath)
+}
+const normalFiles = readdirSync(normalPath)
+const proxyFiles = readdirSync(proxyPath)
 const normalGetters: normalSourceGetter[] = normalFiles.map((fileName: string) => require(`./normal/${fileName}`).default)
 const proxyGetters: proxySourceGetter[] = proxyFiles.map((fileName: string) => require(`./proxy/${fileName}`).default)
 
@@ -63,6 +72,15 @@ export default function (): Promise<generateResult> {
         })
             .map(item => (item as allSettledSuccess).value)
             .reduce((pre: SSRNode[], next: SSRNode[]) => pre.concat(next), [])
-        resolve({result: normalResult, next: generateNext})
+        try {
+            let cache = []
+            if (existsSync(path.resolve(__dirname, '../../data/'))) {
+                let cacheText = readFileSync(path.resolve(__dirname, '../../data/data.json'))
+                cache = JSON.parse(cacheText.toString())
+            }
+            resolve({result: normalResult.concat(cache), next: generateNext})
+        } catch (e) {
+            resolve({result: normalResult, next: generateNext})
+        }
     })
 }

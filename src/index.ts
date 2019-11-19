@@ -1,4 +1,4 @@
-import { writeFile } from "fs"
+import { writeFile, existsSync, mkdirSync } from "fs"
 import path from 'path'
 import Filter from './filters'
 import source  from './source'
@@ -31,6 +31,9 @@ async function main():Promise<void> {
     if (other.length === 0) return void 0
     const restInfo = await new Filter(other).check()
     // Writes all node information
+    if (!existsSync(path.resolve(__dirname, '../data/'))) {
+        mkdirSync(path.resolve(__dirname, '../data/'))
+    }
     writeFile(
         path.resolve(__dirname, '../data/data.json'),
         JSON.stringify(result.concat(restInfo), null, 2),
