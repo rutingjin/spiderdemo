@@ -66,7 +66,7 @@ export default function (): Promise<generateResult> {
         const normalRes = await allSettled(normalPromises)
         const normalResult = normalRes.filter(item => {
             if (item.status !== allSettledStatusEnum.fulfilled) {
-                log((item as allSettledError).reason.message, false)
+                log((item as allSettledError).reason, false)
             }
             return item.status === allSettledStatusEnum.fulfilled
         })

@@ -1,7 +1,7 @@
 import request from 'request'
 import CryptoJS from 'crypto-js'
 
-const uri = 'https://lncn.org/api/lncn'
+const uri = 'https://lncn.org/api/lncnG'
 
 // const defaultConfig: proxyConfig = {
 //     proxy: 'http://127.0.0.1:1080',
@@ -29,7 +29,7 @@ export default function ():Promise<SSRNode[]> {
                     const result = JSON.parse(body)
                     const bytes = CryptoJS.AES.decrypt(
                         result.ssrs || '',
-                        CryptoJS.enc.Utf8.parse('6512654323241236'),
+                        CryptoJS.enc.Utf8.parse('6512654323254321'),
                         {
                             mode: CryptoJS.mode.ECB,
                             padding: CryptoJS.pad.Pkcs7
